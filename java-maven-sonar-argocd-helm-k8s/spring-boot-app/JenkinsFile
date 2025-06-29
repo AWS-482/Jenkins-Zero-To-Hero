@@ -1,7 +1,7 @@
 pipeline {
   agent {
    docker {
-     image 'arun482/maven-abhishek-docker-agent:v2'
+     image 'arun482/maven-abhishek-docker-agent:v4'
      reuseNode true
   }
 }
