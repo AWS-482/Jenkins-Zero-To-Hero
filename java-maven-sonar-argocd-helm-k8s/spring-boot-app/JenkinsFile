@@ -2,7 +2,6 @@ pipeline {
   agent {
    docker {
      image 'arun482/maven-abhishek-docker-agent:v1'
-     args '-v /var/run/docker.sock:/var/run/docker.sock'
   }
 }
   stages {
