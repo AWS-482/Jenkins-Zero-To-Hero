@@ -2,6 +2,7 @@ pipeline {
   agent {
    docker {
      image 'arun482/maven-abhishek-docker-agent:v1'
+     reuseNode true
   }
 }
   stages {
