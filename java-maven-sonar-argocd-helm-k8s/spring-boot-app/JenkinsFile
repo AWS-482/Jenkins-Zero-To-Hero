@@ -1,7 +1,7 @@
 pipeline {
   agent {
    docker {
-     image 'arun482/maven-abhishek-docker-agent:v4'
+     image 'arun482/maven-abhishek-docker-agent:v3'
      reuseNode true
      args '--entrypoint=""' // ✅ Fix 2: Override entrypoint
   }
