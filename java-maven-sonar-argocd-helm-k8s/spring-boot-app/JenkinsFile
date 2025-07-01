@@ -14,23 +14,30 @@ pipeline {
       }
     }
     stage('Build and Test') {
-      steps {
-        sh 'ls -ltr'
-        sh '''
-          cd java-maven-sonar-argocd-helm-k8s/spring-boot-app
+  steps {
+    sh '''
+      cd java-maven-sonar-argocd-helm-k8s/spring-boot-app
 
-          echo "Attempting to manually delete the JAR file..."
-          rm -f target/spring-boot-web.jar || true
+      echo "🔍 Checking contents before deleting..."
+      ls -l target || true
 
-          echo "Fixing permissions just in case..."
-          chmod -R u+rwX target || true
-          
+      echo "🔧 Force deleting JAR and directory..."
+      rm -f target/spring-boot-web.jar || true
+      rm -f target/spring-boot-web.jar.original || true
+      rm -rf target/* || true
 
-           echo "Running Maven build..."
-           mvn clean package
-        '''
-      }
-    }
+      echo "🔧 Reconfirming cleanup..."
+      ls -l target || true
+
+      echo "🔧 Resetting permissions..."
+      chmod -R a+rw target || true
+
+      echo "🚀 Building the project..."
+      mvn clean package
+    '''
+  }
+}
+
     stage('Static Code Analysis') {
       environment {
         SONAR_URL = "http://16.16.128.155:9000"
