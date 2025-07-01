@@ -3,6 +3,7 @@ pipeline {
    docker {
      image 'arun482/maven-abhishek-docker-agent:v4'
      reuseNode true
+     args '--entrypoint=""' // ✅ Fix 2: Override entrypoint
   }
 }
   stages {
@@ -15,8 +16,12 @@ pipeline {
     stage('Build and Test') {
       steps {
         sh 'ls -ltr'
-        // build the project and create a JAR file
-        sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn clean package'
+        // ✅ Fix 1: Set permissions so Maven can clean target/
+        sh '''
+           cd java-maven-sonar-argocd-helm-k8s/spring-boot-app
+           chmod -R 777 target || true
+           mvn clean package
+        '''
       }
     }
     stage('Static Code Analysis') {
