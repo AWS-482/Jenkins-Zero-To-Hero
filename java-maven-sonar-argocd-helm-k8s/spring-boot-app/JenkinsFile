@@ -15,24 +15,14 @@ pipeline {
     }
     stage('Build and Test') {
   steps {
+    sh 'ls -ltr'
     sh '''
       cd java-maven-sonar-argocd-helm-k8s/spring-boot-app
 
-      echo "🔍 Checking contents before deleting..."
-      ls -l target || true
+      echo "🔧 Manually removing target directory before Maven clean..."
+      rm -rf target || true
 
-      echo "🔧 Force deleting JAR and directory..."
-      rm -f target/spring-boot-web.jar || true
-      rm -f target/spring-boot-web.jar.original || true
-      rm -rf target/* || true
-
-      echo "🔧 Reconfirming cleanup..."
-      ls -l target || true
-
-      echo "🔧 Resetting permissions..."
-      chmod -R a+rw target || true
-
-      echo "🚀 Building the project..."
+      echo "🚀 Running Maven build..."
       mvn clean package
     '''
   }
